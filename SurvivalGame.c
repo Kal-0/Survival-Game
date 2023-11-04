@@ -199,7 +199,23 @@ int searchLs(struct list** listH, int value){
 }
 
 
+int countLs(struct list** listH, int value){
+  struct list* temp = *listH;
+  int size = sizeLs(listH);
+  int amount = 0;
 
+  while(temp != NULL){
+    if(temp->item == value){
+      amount++;
+    }
+
+    temp = temp->next;
+  }
+
+  return amount;
+}
+
+//global variables
 struct list* inventory = NULL;
 
 int health, hunger, thirst, time_of_the_day, day;
@@ -253,6 +269,10 @@ void action(double hours, double dificulty_modifier){
   time_of_the_day += 100*hours;
   hunger -= (int)((3*dificulty_modifier)*hours);
   thirst -= (int)((5*dificulty_modifier)*hours);
+
+  if (health > MAX_HEALTH){
+    health = MAX_HEALTH;
+  }
   
   if(hunger > MAX_HUNGER){
     hunger = MAX_HUNGER;
@@ -296,7 +316,7 @@ void action(double hours, double dificulty_modifier){
 
 void rest(){
   printf("You take a rest and recover some health.\n");
-  health += 20;
+  health += 15;
   if (health > MAX_HEALTH){
     health = MAX_HEALTH;
   }
@@ -326,7 +346,7 @@ void hunt(){
     thirst += 50;
   }
   else if (chance < 85){
-    printf("You have found an wild Bear!.\n");
+    printf("You have found an wild Bear!\n");
     health -= 25;
   }
   else{
@@ -337,25 +357,28 @@ void hunt(){
 }
 
 void scavenge(){
-  printf("You scavenge for useful items.\n");
+  printf("You went to scavenge for useful items");
+  loading();
+  printf("\n\n");
+
   int chance = rand() % 100;
   
   if (chance < 15){
-    printf("You found a first-aid kit!\n");
-    insertLs(&inventory, -1, 1);
+    printf("You found a medkit!\n");
+    insertLs(&inventory, sizeLs(&inventory), 1);
     
   }
   else if (chance < 45){
     printf("You found some canned food.\n");
-    insertLs(&inventory, -1, 2);
+    insertLs(&inventory, sizeLs(&inventory), 2);
   }
   else if (chance < 80){
     printf("You found a bottle of water.\n");
-    insertLs(&inventory, -1, 3);
+    insertLs(&inventory, sizeLs(&inventory), 3);
   }
   else if (chance < 90){
     printf("You found a gun.\n");
-    insertLs(&inventory, -1, 4);
+    insertLs(&inventory, sizeLs(&inventory), 4);
   }
   else{
     printf("You didn't find anything useful.\n");
@@ -364,6 +387,81 @@ void scavenge(){
 }
 
 void openInventory(){
+  int option;
+
+  while (1){
+    printf("\n======IVENTORY======\n");
+    printf("Itens:\n");
+    printf("Medkits: %d\n", countLs(&inventory, 1));
+    printf("cans of food: %d\n", countLs(&inventory, 2));
+    printf("bottles of water: %d\n", countLs(&inventory, 3));
+    printf("gun: %d\n", countLs(&inventory, 4));
+
+    printf("chose an action:\n");
+    printf("0.  exit inventory\n");
+    printf("1.  use medkit\n");
+    printf("2.  use canned food\n");
+    printf("3.  use bottle of water\n");
+
+
+    scanf(" %d", &option);
+
+    if (option == 0){
+      break;
+    }
+    else if (option == 1){
+      if(countLs(&inventory, 1) != 0){
+        health += 35;
+
+
+        deleteLs(&inventory, searchLs(&inventory, 1));
+
+        printf("You have used a medkit!\n");
+      }
+      else{
+        printf("You do not have a medkit to use!\n");
+      }
+    }
+    else if (option == 2){
+      if(countLs(&inventory, 2) != 0){
+        hunger += 30;
+        thirst += 10;
+        deleteLs(&inventory, searchLs(&inventory, 2));
+
+        printf("You have used a canned food!\n");
+      }
+      else{
+        printf("You do not have a canned food to use!\n");
+      }
+      
+    }
+    else if (option == 3){
+      if(countLs(&inventory, 3) != 0){
+        thirst += 60;
+        deleteLs(&inventory, searchLs(&inventory, 3));
+
+        printf("you have used a bottle of water!\n");
+      }
+      else{
+        printf("You do not have a bottle of water to use!\n");
+      }
+      
+    }
+
+
+    if (health > MAX_HEALTH){
+      health = MAX_HEALTH;
+    }
+    
+    if(hunger > MAX_HUNGER){
+      hunger = MAX_HUNGER;
+    }
+
+    if(thirst > MAX_THIRST){
+      thirst = MAX_THIRST;
+    }
+
+  }
   
 }
 
@@ -392,6 +490,9 @@ int main()
       printf("\n");
 
       switch (choice){
+        case 0:
+          openInventory();
+          break;
         case 1:
           rest();
           break;
