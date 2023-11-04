@@ -24,6 +24,9 @@ int main()
       printf("\n");
 
       switch (choice){
+        case -1:
+          printf("Thanks for playing! see you soon!");
+          exit(0);
         case 0:
           openInventory();
           break;
