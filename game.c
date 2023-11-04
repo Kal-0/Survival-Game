@@ -66,6 +66,8 @@ void nextDay(){
     printf("You have survived for %d days!\n", day);
     printf("Someone came to rescue you!\n\n");
 
+    registerScore(day);
+
     exit(0);
   }
 }
@@ -102,6 +104,10 @@ void action(double hours, double dificulty_modifier){
     
     printf("You died!\n");
     printf("Days survived: %d.\n", day);
+
+    registerScore(day);
+    readScore();
+
     // printf("cause of death:\n");
 
     // if (hunger <= 0){
@@ -282,4 +288,72 @@ void mainHistory(){
     printf("-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=BEM-VINDO AO NAUFRAGO-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n");
     
     loading(); loading(); loading(); loading();
+}
+
+void registerScore(int days){
+    char nome[100];
+
+    printf("Enter your first name to save your score\n");
+    scanf("%s", nome);
+
+    FILE *file;
+
+    file = fopen("records.txt", "a");
+
+    if (file == NULL){
+        printf("Something went wrong when saving your score");
+        return;
+    }
+
+    fprintf(file, "Name: %s Days: %d\n", nome, days);
+
+    fclose(file);
+
+}
+
+void sortScore(score arr[], int n){
+    int i, j;
+    score chave;
+
+    for (i=1;i<n;i++){
+        chave = arr[i];
+        j = i -1;
+
+        while (j>=0 && arr[j].dias < chave.dias){
+            arr[j+1] = arr[j];
+            j = j-1;
+        }
+
+        arr[j+1] = chave;
+    }
+}
+
+void readScore(){
+    FILE *file;
+    int numRow = 0;
+    score scores[100];
+
+    file = fopen("records.txt", "r");
+
+    if (file == NULL){
+        printf("Something went wrong when read scores");
+        return;
+    }
+
+    char row[100];
+    while (fgets(row, sizeof(row), file) != NULL){
+        if (sscanf(row, "Name: %99s Days: %d", scores[numRow].nome, &scores[numRow].dias) == 2){
+            numRow++;
+        }
+    }
+
+    fclose(file);
+
+    sortScore(scores, numRow);
+
+    printf("\n-=-=-=-=-=-=-=-=-=-=-=-=TOP 5 SCORES-=-=-=-=-=-=-=-=-=-=-=-=\n");
+    for (int i = 0; i < 5; i++) {
+        printf("Name: %s \t| Days Survived: %d\n", scores[i].nome, scores[i].dias);
+    }
+
 }
