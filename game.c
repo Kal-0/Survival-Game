@@ -176,7 +176,9 @@ void actionMenu() {
 void nextDay() {
   time_of_the_day = time_of_the_day % 2400;
   if(days->next != NULL){
+    struct list* aux = days;
     days = days->next;
+    free(aux);
   }
   day = days->item;
   printf("\nAnother day has passed");
