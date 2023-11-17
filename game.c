@@ -8,7 +8,7 @@
 #define MAX_HUNGER 100
 #define MAX_THIRST 100
 #define STARTING_HOUR 1200
-#define MAX_DAYS 1
+#define MAX_DAYS 7
 
 // itens codes:
 // med-kit = 1
@@ -51,9 +51,9 @@ void loading() {
   usleep(500000);
 }
 
-void initializeDays(struct list *days) {
+void initializeDays(struct list **days) {
   for (int i = 0; i <= MAX_DAYS; i++) {
-    insertLs(&days, sizeLs(&days), i);
+    insertLs(days, sizeLs(days), i);
   }
 }
 

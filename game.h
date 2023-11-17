@@ -7,7 +7,7 @@ typedef struct score {
 void printStatus();
 void loading();
 void nextDay();
-void initializeDays(struct list *days);
+void initializeDays(struct list **days);
 
 void actionMenu();
 void action(double hours, double dificulty_modifier);
