@@ -16,7 +16,8 @@ int sizeLs(struct list** listH){
 }
 
 
-int insertLs(struct list** listH, int index, int value){
+int insertLs(struct list** listH, int index, int value, Event* event){
+
   struct list* temp = *listH;
   int size = sizeLs(listH);
   int target = index;
@@ -35,6 +36,7 @@ int insertLs(struct list** listH, int index, int value){
   struct list* newModule;
   newModule = (struct list*)malloc(sizeof(struct list));
   newModule->item = value;
+  newModule->event = event;
   newModule->next = NULL;
   newModule->last = NULL;
 

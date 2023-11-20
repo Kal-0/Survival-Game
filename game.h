@@ -20,3 +20,4 @@ void registerScore(int days);
 void sortScore(score arr[], int n);
 void readScore();
 void start();
+void startEvent();

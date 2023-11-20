@@ -38,23 +38,72 @@ void printStatus() {
 }
 
 void loading() {
+  int tempo = 30000;
   fflush(stdout);
-  usleep(500000);
+  usleep(tempo);
   printf(".");
   fflush(stdout);
-  usleep(500000);
+  usleep(tempo);
   printf(".");
   fflush(stdout);
-  usleep(500000);
+  usleep(tempo);
   printf(".");
   fflush(stdout);
-  usleep(500000);
+  usleep(tempo);
+  
 }
 
 void initializeDays(struct list **days) {
+
   for (int i = 0; i <= MAX_DAYS; i++) {
-    insertLs(days, sizeLs(days), i);
-  }
+
+  Event *event = (Event *)malloc(sizeof(Event));
+
+    if (i==0){
+      event->health = 0;
+      event->hunger = 0;
+      event->thirst = 0;
+      strcpy(event->event, "You awake in a deserted island in the middle of nowhere surrounded by wreckage of ships and planes, you need to survive until someone comes to rescue you!");
+    }
+    else if(i==1){
+      event->health = 0;
+      event->hunger = 0;
+      event->thirst = -20;
+      strcpy(event->event, "the day is very hot, you are starting to feel thirsty, you need to find some water!");
+    }
+    else if (i==2){
+      event->health = -8;
+      event->hunger = -20;
+      event->thirst = 0;
+      strcpy(event->event, "you ate something that you shouldn't, you have threw up your last meal, you need to find some food!");
+    }
+    else if(i==3){
+      event->health = 0;
+      event->hunger = 30;
+      event->thirst = 30;
+      strcpy(event->event, "you found a coconut tree, you ate some coconuts and drank some coconut water, you feel better now!");
+    }
+    else if(i==4){
+      event->health = 29;
+      event->hunger = 0;
+      event->thirst = 0;
+      strcpy(event->event, "you found a medkit, you used it to heal your wounds, you feel better now!");
+    }
+    else if(i==5){
+      event->health = -1;
+      event->hunger = 0;
+      event->thirst = 0;
+      strcpy(event->event, "Today the sun is covered by the clouds, the animals are so quiet, you can hear your self breathig, you feel is something bad is going to happen!");
+    }
+    else if(i==6){
+      event->health = 0;
+      event->hunger = 0;
+      event->thirst = 0;
+      strcpy(event->event, "");
+    }
+    
+    insertLs(days, sizeLs(days), i, event);
+    }
 }
 
 void mainHistory() {
@@ -84,6 +133,14 @@ void mainHistory() {
   loading();
 }
 
+void startEvent() {
+  day = days->item;
+  health += days->event->health;
+  hunger += days->event->hunger;
+  thirst += days->event->thirst;
+  printf("%s\n", days->event->event);
+}
+
 void start() {
   srand(time(NULL));
   mainHistory();
@@ -111,14 +168,14 @@ void start() {
     case 1:
       inventory = NULL;
       days = NULL;
-      initializeDays(&days);
 
+      initializeDays(&days);
       health = MAX_HEALTH;
       hunger = MAX_HUNGER;
       thirst = MAX_THIRST;
       time_of_the_day = STARTING_HOUR;
-      day = days->item;
-
+      day = 0;
+      startEvent();
       actionMenu();
       break;
 
@@ -180,11 +237,41 @@ void nextDay() {
     days = days->next;
     free(aux);
   }
-  day = days->item;
+  else{
+    free(days);
+    days = NULL;
+  }
+
+  
+
+
   printf("\nAnother day has passed");
   loading();
   printf("\n\n");
 
+  startEvent();
+
+
+  if (day == MAX_DAYS-1){
+    printf("Giant and angry wild bear has appeared!\n");
+    printf("You need to kill it to survive!\n");
+    if (countLs(&inventory, 4) != 0) {
+      printf("luckly you had a gun with you!\n");
+      printf("you broke your gun during the fight.\n");
+      printf("the bear gave you plenty of nourishment.\n");
+      printf("you feel revigorated with that meal.\n");
+
+      deleteLs(&inventory, searchLs(&inventory, 4));
+
+      hunger += 100;
+      thirst += 100;
+      health += 10;
+    } else {
+      printf(
+          "unfortunatly, you did not had anything to defend yourself with.\n");
+      health -= 100;
+    }
+  }
   if (day == MAX_DAYS) {
     printf("YOU WON!\n");
     printf("You have survived for %d days!\n", day);
@@ -193,6 +280,7 @@ void nextDay() {
     registerScore(day);
 
   }
+  action(0, 0);
 }
 
 void action(double hours, double dificulty_modifier) {
@@ -314,19 +402,19 @@ void scavenge() {
 
   if (chance < 15) {
     printf("You found a medkit!\n");
-    insertLs(&inventory, sizeLs(&inventory), 1);
+    insertLs(&inventory, sizeLs(&inventory), 1, NULL);
 
   } else if (chance < 45) {
     printf("You found some canned food.\n");
-    insertLs(&inventory, sizeLs(&inventory), 2);
+    insertLs(&inventory, sizeLs(&inventory), 2, NULL);
   } else if (chance < 80) {
     printf("You found a bottle of water.\n");
-    insertLs(&inventory, sizeLs(&inventory), 3);
+    insertLs(&inventory, sizeLs(&inventory), 3, NULL);
   } else if (chance < 90) {
     printf("You found a gun.\n");
 
     if (countLs(&inventory, 4) == 0) {
-      insertLs(&inventory, sizeLs(&inventory), 4);
+      insertLs(&inventory, sizeLs(&inventory), 4, NULL);
     } else {
       printf("unfortunatly, you are already carrying a gun and can not carry "
              "another.\n");
