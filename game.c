@@ -101,6 +101,12 @@ void initializeDays(struct list **days) {
       event->thirst = 0;
       strcpy(event->event, "");
     }
+    else if(i==7){
+      event->health = 0;
+      event->hunger = 0;
+      event->thirst = 0;
+      strcpy(event->event, "Finally! Someone came to rescue you!");
+    }
     
     insertLs(days, sizeLs(days), i, event);
     }
@@ -445,6 +451,7 @@ void openInventory() {
     printf("3.  use bottle of water\n");
 
     scanf(" %d", &option);
+    system("cls");
 
     if (option == 0) {
       break;
