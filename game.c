@@ -1,6 +1,7 @@
 #include "game.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <time.h>
 #include <unistd.h>
 
@@ -116,21 +117,17 @@ void mainHistory() {
   printf(
       "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-="
       "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n");
-  printf("Voce eh o capitao de um navio com uma poderosa tripulacao, Valentes "
-         "e sem nada a perder. Voces partem corajosamente em direcao ao\n");
-  printf("Triangulo das Camisetas, uma regiao famosa por devorar navios, "
-         "incluindo o grandioso Titanico.\n");
-  printf("No entanto, mesmo com uma tripulacao tao destemida, voces nao "
-         "conseguiram escapar das garras impiedosas do mar.\n\n");
-  printf("O navio naufraga, e toda sua tripulacao sucumbe, deixando somente "
-         "voce como sobrevivente\n");
-  printf("em uma ilha deserta, com poucos recursos e uma unica chance de "
-         "sobrevivencia.\n");
-  printf("Seu desafio: aguentar sete dias a espera do resgate, enfrentando "
-         "fome, sede e todas as adversidades dessa ilha amaldicoada.\n");
-  printf("Mas tenha cuidado com os ursos! Se estiver armado, a vitoria e "
-         "garantida! Caso contrario...\n");
-  printf("-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=BEM-VINDO AO "
+  printf("You are the captain of a ship with a powerful crew, brave and with nothing to lose. "
+       "You set sail courageously towards the\n");
+printf("Camisetas Triangle, a region famous for devouring ships, including the grand Titanico.\n");
+printf("However, even with such a fearless crew, you could not escape the ruthless clutches of the sea.\n\n");
+printf("The ship sinks, and all your crew succumbs, leaving only you as the survivor\n");
+printf("on a deserted island, with few resources and a single chance of survival.\n");
+printf("Your challenge: endure seven days waiting for rescue, facing hunger, thirst,"
+        " and all the adversities of this cursed island.\n");
+printf("But beware of the bears! If you are armed, victory is guaranteed! Otherwise...\n");
+
+  printf("-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=WELCOME TO "
          "NAUFRAGO-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n");
 
   loading();
@@ -190,6 +187,7 @@ void start() {
       break;
     }
     
+    freeLs(&inventory);
   }
   
   
@@ -243,9 +241,11 @@ void nextDay() {
   if(days->next != NULL){
     struct list* aux = days;
     days = days->next;
+    free(aux->event);
     free(aux);
   }
   else{
+    free(days->event);
     free(days);
     days = NULL;
   }

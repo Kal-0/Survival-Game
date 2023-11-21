@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "lists.h"
 
 int sizeLs(struct list** listH){
@@ -193,4 +194,25 @@ int countLs(struct list** listH, int value){
   }
 
   return amount;
+}
+
+void freeLs(struct list** listH){
+  struct list* temp = *listH;
+  struct list* aux;
+
+  if(*listH == NULL){
+    return;
+  }
+  
+  while(temp != NULL){
+    aux = temp;
+    temp = temp->next;
+    
+    if(aux->event != NULL){
+      free(aux->event);
+    }
+    free(aux);
+  }
+
+  *listH = NULL;
 }

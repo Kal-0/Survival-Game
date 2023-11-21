@@ -18,3 +18,4 @@ int insertLs(struct list** listH, int index, int value, Event* event);
 int deleteLs(struct list** listH, int index);
 int searchLs(struct list** listH, int value);
 int countLs(struct list** listH, int value);
+void freeLs(struct list** listH);
