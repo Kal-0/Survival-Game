@@ -131,6 +131,7 @@ void mainHistory() {
   loading();
   loading();
   loading();
+  printf("\n");
 }
 
 void startEvent() {
