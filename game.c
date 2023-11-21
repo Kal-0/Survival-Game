@@ -205,6 +205,7 @@ void actionMenu() {
     int choice;
     scanf("%d", &choice);
     printf("\n");
+    system("cls");
 
     if (choice == -1){
       break;
