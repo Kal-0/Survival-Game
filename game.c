@@ -157,9 +157,9 @@ void start() {
 
   while (1){
     printf("Choose an option:\n");
-    printf("-1.  Quit Game\n");
-    printf("0.   View top scores\n");
-    printf("1.   Start game\n");
+    printf("[-1]- Quit Game\n");
+    printf("[00]- View top scores\n");
+    printf("[01]- Start game\n");
     int option;
     scanf(" %d", &option);
 
